@@ -87,6 +87,6 @@ public class MOIT101Group34 {
             System.out.println("Birthday : " + birthday);
             System.out.println("===================================");
             
-            
+            HAYE
     }
 }
