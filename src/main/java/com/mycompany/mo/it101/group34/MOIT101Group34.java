@@ -205,8 +205,4 @@ static double computeHours(LocalTime timeIn, LocalTime timeOut) {
         // Return hours worked, capped at 8
         return Math.min(hours, 8.0);
     }
-
-
-
-
 }
