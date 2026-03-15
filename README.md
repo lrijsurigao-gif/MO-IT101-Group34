@@ -10,17 +10,17 @@ Compute Hours – computeHours accounts for grace period, lunch break deduction,
 Calculate Payroll
 
 
-**Deductions **
+**Deductions**
 – Calculated on monthly gross (second cutoff only) using dedicated functions:
 SSS contribution (SSS)
 PhilHealth contribution (PhilHealth)
 Pag-IBIG contribution (PagIBIG)
 Withholding tax (WithholdingTax)
 
-**Gross Salary **
+**Gross Salary**
 – Computed per cutoff based on hours worked and hourly rate.
 
-**Net Salary **
+**Net Salary**
 – computeNetSalary subtracts deductions from the second cutoff’s gross salary.
 
 **Output** 
