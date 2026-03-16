@@ -175,7 +175,7 @@ while (true) {
         System.out.println("Employee # : " + employeeNum);
         System.out.println("Employee Name : " + f_name + " " + l_name);
         System.out.println("Birthday : " + birthday);
-        System.out.printf("Hourly Rate : ₱%.2f%n", hourlyRate);
+        System.out.printf("Hourly Rate : PHP%.2f%n", hourlyRate);
         System.out.println("===================================");
 
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm");
@@ -229,18 +229,18 @@ while (true) {
 
             System.out.println("\nCutoff Date: " + monthName + " 1–15");
             System.out.printf("  Total Hours Worked: %.2f%n", first);
-            System.out.printf("  Gross Salary: ₱%.2f%n", grossFirst);
-            System.out.printf("  Net Salary: ₱%.2f%n", netFirst);
+            System.out.printf("  Gross Salary: PHP%.2f%n", grossFirst);
+            System.out.printf("  Net Salary: PHP%.2f%n", netFirst);
 
             System.out.println("\nCutoff Date: " + monthName + " 16–" + days);
             System.out.printf("  Total Hours Worked: %.2f%n", second);
-            System.out.printf("  Gross Salary: ₱%.2f%n", grossSecond);
+            System.out.printf("  Gross Salary: PHP%.2f%n", grossSecond);
             System.out.println("===== Deductions =====");
-            System.out.printf("  SSS: ₱%.2f%n", SSS(monthlyGross));
-            System.out.printf("  PhilHealth: ₱%.2f%n", PhilHealth(monthlyGross));
-            System.out.printf("  Pag‑IBIG: ₱%.2f%n", PagIBIG(monthlyGross));
-            System.out.printf("  Tax: ₱%.2f%n", WithholdingTax(monthlyGross));
-            System.out.printf("Net Salary: ₱%.2f%n", netSecond);
+            System.out.printf("  SSS: PHP%.2f%n", SSS(monthlyGross));
+            System.out.printf("  PhilHealth: PHP%.2f%n", PhilHealth(monthlyGross));
+            System.out.printf("  Pag‑IBIG: PHP%.2f%n", PagIBIG(monthlyGross));
+            System.out.printf("  Tax: PHP%.2f%n", WithholdingTax(monthlyGross));
+            System.out.printf("Net Salary: PHP%.2f%n", netSecond);
         }
     }
 }
