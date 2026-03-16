@@ -1,3 +1,14 @@
+Team Details
+
+Ioshua Jericho Surigao – Responsible for the system design, coding, and overall development of the program.
+
+Irish Chene Sia – Responsible for assisting in system testing, debugging, and operating the system.
+
+Program Details
+
+The system is designed to perform its intended functions by processing user input, executing programmed operations, and generating the appropriate output. It follows a structured workflow where users interact with the interface, the system processes the data, and results are displayed or stored accordingly.
+
+
 The MotorPH Payroll System reads employee information and attendance records from CSV files and calculates the total hours worked per payroll cutoff (1–15 and 16–end of month). It then computes gross salary, deductions (SSS, PhilHealth, Pag-IBIG, Withholding Tax), and net salary for each employee. The deductions are applied only on the second cutoff, while the first cutoff shows the gross pay.
 
 **How the System Works**
@@ -33,3 +44,6 @@ These deductions are applied only during the second payroll cutoff.
 * Hourly rates are taken from the last column of the employee CSV file to avoid issues caused by commas in address fields.
 *The first cutoff (1–15) displays gross pay only, while deductions are applied to the second cutoff (16–end of month).
 *Payroll summaries are generated for each month from June to December 2024.
+
+Project Plank Link
+https://docs.google.com/spreadsheets/d/191wCYeDszavsIyeajUZtuKeLhfIYSlSsX1f0L-Dl3Tk/edit?usp=sharing
