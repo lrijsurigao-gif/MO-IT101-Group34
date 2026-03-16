@@ -67,10 +67,14 @@ public class MOIT101Group34 {
     }
 
     static double PhilHealth(double monthlyGross) {
+        // 3% premium rate
         double premium = monthlyGross * 0.03;
+        
+        // Cap the premium between 300 and 1800
         if (premium < 300) premium = 300;
         if (premium > 1800) premium = 1800;
-        return premium / 2; // employee share
+        
+        return premium / 2; // employee share is 50% only 
     }
 
     static double PagIBIG(double monthlyGross) {
@@ -84,6 +88,7 @@ public class MOIT101Group34 {
         double pi = PagIBIG(monthlyGross);
         double taxable = monthlyGross - (sss + ph + pi);
 
+        // rules as per motor ph withholding tax file
         if (taxable <= 20832) return 0;
         else if (taxable <= 33332) return (taxable - 20833) * 0.20;
         else if (taxable <= 66666) return 2500 + (taxable - 33332) * 0.25;
@@ -93,6 +98,7 @@ public class MOIT101Group34 {
     }
 
     static double computeGrossSalary(double hoursWorked, double hourlyRate) {
+        // simple gross hourly
         return hoursWorked * hourlyRate;
     }
 
@@ -104,7 +110,7 @@ public class MOIT101Group34 {
         return secondGross - (sss + ph + pi + tax);
     }
 
-    static double computeHours(LocalTime timeIn, LocalTime timeOut) {
+    static double computeHoursWorked(LocalTime timeIn, LocalTime timeOut) {
         LocalTime graceTime = LocalTime.of(8, 10);
         LocalTime cutoffTime = LocalTime.of(17, 0);
 
@@ -121,10 +127,11 @@ public class MOIT101Group34 {
 
     // ===== MAIN PROGRAM =====
     public static void main(String[] args) throws com.opencsv.exceptions.CsvValidationException {
+        // initialize the CSV files needed
+        String employeeCSV = "C:/Users/ioshs/Documents/NetBeansProjects/MO-IT101-Group34/src/main/java/com/mycompany/mo/it101/group34/MotorPH_Employee Data - Employee Details.csv";
+        String attendanceCSV = "C:/Users/ioshs/Documents/NetBeansProjects/MO-IT101-Group34/src/main/java/com/mycompany/mo/it101/group34/MotorPH_Employee Data - Attendance Record.csv";
 
-        String employeeCSV = "C:/NetBeansProjects/MO-IT101-Group34/Copy of MotorPH_Employee Data - Employee Details.csv";
-        String attendanceCSV = "C:/NetBeansProjects/MO-IT101-Group34/Copy of MotorPH_Employee Data - Attendance Record (1).csv";
-
+        // initiliaze variables
         String employeeNum = "";
         String l_name = "";
         String f_name = "";
@@ -133,12 +140,16 @@ public class MOIT101Group34 {
         double hourlyRate = 0.00;
         boolean match = false;
 
+        // WELCOME OUTPUT
         System.out.println("===================================");
         System.out.println("Welcome to MotorPH Payroll System");
         System.out.println("===================================\n");
 
+        // ASKS FOR USER INPUT
         Scanner scanner = new Scanner(System.in);
-while (true) {
+        
+        // LOOPS TILL CORRECT EMPLOYEE NUMBER
+        while (true) {
             System.out.print("Enter Employee No.: ");
             inputEmpNum = scanner.nextLine();
 
@@ -148,34 +159,37 @@ while (true) {
                 String[] data;
                 while ((data = reader.readNext()) != null) {
                     if (data[0].equals(inputEmpNum)) {
-                        employeeNum = data[0];
-                        l_name = data[1];
-                        f_name = data[2];
-                        birthday = data[3];
+                        employeeNum = data[0]; // Column 1: Employee Number
+                        l_name = data[1]; // Column 2: Employee Last Name
+                        f_name = data[2]; // Column 3: Employee First Name
+                        birthday = data[3]; // Column 4: Employee Birthday
+                        
+                        // to get the float hourly rate (to be multiplied in hours worked)
                         try {
                             hourlyRate = Double.parseDouble(data[data.length - 1].replace("\"", "").trim());
                         } catch (NumberFormatException nfe) {
-                            System.out.println("⚠️ Invalid hourly rate format for employee " + inputEmpNum + ". Defaulting to ₱0.00.");
+                            System.out.println("Invalid hourly rate format for employee " + inputEmpNum + ". Defaulting to ₱0.00.");
                             hourlyRate = 0.0;
                         }
                         match = true;
                     }
                 }
             } catch (com.opencsv.exceptions.CsvValidationException e) {
-                System.out.println("⚠️ Error reading employee data: " + e.getMessage());
+                System.out.println("Error reading employee data: " + e.getMessage());
             }
         } catch (Exception e) {
-                System.out.println("⚠️ Error reading employee file: " + e.getMessage());
+                System.out.println("Error reading employee file: " + e.getMessage());
             }
             if (match) break;
             else System.out.println("Employee not found. Please try again.");
         }
 
+        // EMPLOYEE DETAILS
         System.out.println("===================================");
         System.out.println("Employee # : " + employeeNum);
         System.out.println("Employee Name : " + f_name + " " + l_name);
         System.out.println("Birthday : " + birthday);
-        System.out.printf("Hourly Rate : PHP%.2f%n", hourlyRate);
+//        System.out.printf("Hourly Rate : PHP%.2f%n", hourlyRate); // tests if correct hourly rate is caught
         System.out.println("===================================");
 
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm");
@@ -195,20 +209,24 @@ while (true) {
                         int month = Integer.parseInt(dateParts[0]);
                         int day = Integer.parseInt(dateParts[1]);
                         int year = Integer.parseInt(dateParts[2]);
+                        
+                        // correctly filters days worked in a cutoff
                         if (year != 2024 || month != month_num) continue;
 
+                        // initialize time in / time out
                         LocalTime timeIn = LocalTime.parse(data[4].trim(), timeFormat);
                         LocalTime timeOut = LocalTime.parse(data[5].trim(), timeFormat);
-                        double hours = computeHours(timeIn, timeOut);
+                        double hours = computeHoursWorked(timeIn, timeOut);
 
                         if (day <= 15) first += hours; else second += hours;
                     }
                 }
             } catch (IOException e) {
-                System.out.println("⚠️ Unable to process attendance for month " + month_num + ": " + e.getMessage());
+                System.out.println("Unable to process attendance for month " + month_num + ": " + e.getMessage());
                 continue;
             }
-
+            
+            // get month name for summary
             String monthName = switch (month_num) {
                 case 6 -> "June";
                 case 7 -> "July";
@@ -220,25 +238,28 @@ while (true) {
                 default -> "Month " + month_num;
             };
 
+            // call function to get first & second gross salary
             double grossFirst = computeGrossSalary(first, hourlyRate);
             double grossSecond = computeGrossSalary(second, hourlyRate);
             double monthlyGross = grossFirst + grossSecond;
 
+            // 1st net = 1st gross (no deductions applied yet)
             double netFirst = grossFirst;
+            // 2nd net = deductions applied
             double netSecond = computeNetSalary(grossSecond, monthlyGross);
 
-            System.out.println("\nCutoff Date: " + monthName + " 1–15");
+            System.out.println("\nCutoff Date: " + monthName + " 1-15");
             System.out.printf("  Total Hours Worked: %.2f%n", first);
             System.out.printf("  Gross Salary: PHP%.2f%n", grossFirst);
             System.out.printf("  Net Salary: PHP%.2f%n", netFirst);
 
-            System.out.println("\nCutoff Date: " + monthName + " 16–" + days);
+            System.out.println("\nCutoff Date: " + monthName + " 16-" + days);
             System.out.printf("  Total Hours Worked: %.2f%n", second);
             System.out.printf("  Gross Salary: PHP%.2f%n", grossSecond);
             System.out.println("===== Deductions =====");
             System.out.printf("  SSS: PHP%.2f%n", SSS(monthlyGross));
             System.out.printf("  PhilHealth: PHP%.2f%n", PhilHealth(monthlyGross));
-            System.out.printf("  Pag‑IBIG: PHP%.2f%n", PagIBIG(monthlyGross));
+            System.out.printf("  Pag-IBIG: PHP%.2f%n", PagIBIG(monthlyGross));
             System.out.printf("  Tax: PHP%.2f%n", WithholdingTax(monthlyGross));
             System.out.printf("Net Salary: PHP%.2f%n", netSecond);
         }
